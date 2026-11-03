@@ -1,0 +1,27 @@
+# Lake downloads and generated build files
+.lake/
+
+# Lean build artifacts outside .lake
+*.olean
+*.olean.private
+*.olean.server
+*.ilean
+*.trace
+*.o
+*.so
+*.dylib
+*.dll
+
+# Local editor and operating-system files
+.DS_Store
+._*
+__MACOSX/
+Thumbs.db
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# Local verification logs
+*.log
