@@ -1,0 +1,39 @@
+name: Lean verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lean-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and inspect theorem axioms
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      LEAN_NUM_THREADS: 2
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned Lean version and build
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: "false"
+          build: "true"
+          use-mathlib-cache: "true"
+
+      - name: Check the CSP alphabet boundary
+        run: lake env lean checks/AlphabetRegression.lean
+
+      - name: Print the main theorem axiom dependencies
+        run: lake env lean checks/MainAxioms.lean
